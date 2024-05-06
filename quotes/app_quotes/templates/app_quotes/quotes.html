@@ -1,0 +1,43 @@
+{% extends 'app_quotes/base.html' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-8">
+            {% for quote in quotes_on_page %}
+            <div class="quote" itemscope itemtype="http://schema.org/CreativeWork">
+                <span class="text" itemprop="text"> {{quote.quote}} </span>
+                <span>by <small class="author" itemprop="author">{{quote.author.fullname}}</small>
+                <a href="{% url 'app_quotes:author' author_name=quote.author.fullname %}">(about)</a>
+                </span>
+                <div class="tags">
+                    Tags:
+                    <meta class="keywords" itemprop="keywords" content="change,deep-thoughts,thinking,world" /    > 
+                    {% for tag in quote.tags %}
+                    <a class="tag" href="/tag/{{tag}}">{{tag}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <nav>
+        <ul class="pager">
+            
+            <li class="previous">
+                <a class="{% if not quotes_on_page.has_previous %} disabled {% endif %}"
+                href="{% if quotes_on_page.has_previous %}{% url 'app_quotes:quotes_paginate' quotes_on_page.previous_page_number %} {% else %} # {% endif %}">
+                <span aria-hidden="true">&larr;</span> Previous</a>
+            </li>
+            
+            
+            <li class="next">
+                <a class="{% if not quotes_on_page.has_next %} disabled {% endif %}"
+                href="{% if quotes_on_page.has_next %}{% url 'app_quotes:quotes_paginate' quotes_on_page.next_page_number %} {% else %} # {% endif %}">Next
+                <span aria-hidden="true">&rarr;</span></a>
+            </li>
+            
+        </ul>
+    </nav>
+    
+{% endblock %}
